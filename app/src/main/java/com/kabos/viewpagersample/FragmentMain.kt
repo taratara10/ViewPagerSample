@@ -36,9 +36,8 @@ class FragmentMain: Fragment() {
 
 
         viewModel.flag.observe(viewLifecycleOwner,{ replacePattern ->
-            adapter.addFragment(replacePattern)
+            adapter.replaceFragment(replacePattern)
         })
-
 
     }
 }

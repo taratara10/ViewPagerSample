@@ -22,7 +22,7 @@ class FragmentOne: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnReplaceA.setOnClickListener {
-                viewModel.flag.postValue(ReplacePattern.A)
+                viewModel.flag.postValue(ReplacePattern.OneToA)
         }
 
     }

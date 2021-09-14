@@ -8,6 +8,4 @@ class PagerViewModel(application: Application) : AndroidViewModel(application) {
 
     val flag = MutableLiveData<ReplacePattern>()
 
-
-
 }

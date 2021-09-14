@@ -4,9 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class ViewPagerAdapter (fragment: Fragment): FragmentStateAdapter(fragment) {
-    private var replacePattern = ReplacePattern.A
-    private var fragmentList = mutableListOf<Fragment>()
-    private var idsList = mutableListOf<Long>()
+    private val fragmentList = mutableListOf<Fragment>()
+    private val idsList = mutableListOf<Long>()
 
 
     init {
@@ -20,7 +19,7 @@ class ViewPagerAdapter (fragment: Fragment): FragmentStateAdapter(fragment) {
         }
     }
 
-    override fun getItemCount(): Int = idsList.size
+    override fun getItemCount(): Int = fragmentList.size
 
     override fun getItemId(position: Int): Long = idsList[position]
 
@@ -28,49 +27,43 @@ class ViewPagerAdapter (fragment: Fragment): FragmentStateAdapter(fragment) {
 
     override fun createFragment(position: Int): Fragment = fragmentList[position]
 
+    fun replaceFragment(pattern: ReplacePattern){
 
-    fun addFragment(pattern: ReplacePattern){
-        this.replacePattern = pattern
-
-        //FragmentOneを削除
-        //fragmentList = [FragmentTwo, FragmentThree]
-        fragmentList.removeFirst()
-        idsList.removeFirst()
-
-
-        if (replacePattern == ReplacePattern.A) {
-
+        //FragmentOneをremoveして、FragmentAに置き換える
+        if (pattern == ReplacePattern.OneToA) {
+            fragmentList.removeFirst()
             fragmentList.add(0, (FragmentA()))
-            fragmentList.first() {
-                idsList.add(it.hashCode().toLong())
-            }
-        }
-        if (replacePattern == ReplacePattern.AB){
-            fragmentList.add(0, (FragmentA()))
-            fragmentList.add(1, (FragmentB()))
-
-            //Assign unique id to each fragment
-            idsList.add(fragmentList[0].hashCode().toLong())
-            idsList.add(fragmentList[1].hashCode().toLong())
         }
 
+        //FragmentTwoをremoveして、FragmentA , Bに置き換える
+        if (pattern == ReplacePattern.TwoToAB){
+            fragmentList.removeAt(1)
+            fragmentList.add(1, (FragmentA()))
+            fragmentList.add(2, (FragmentB()))
+        }
 
-        notifyDataSet()
+        //
+        idsList.clear()
+        fragmentList.forEach {
+            idsList.add(it.hashCode().toLong())
+        }
+
+        notifyDataSet(pattern)
     }
 
-    fun notifyDataSet(){
-        if (replacePattern == ReplacePattern.A){
+    private fun notifyDataSet(pattern: ReplacePattern){
+        if (pattern == ReplacePattern.OneToA){
             notifyItemRemoved(0)
             notifyItemInserted(0)
         }
-        if (replacePattern == ReplacePattern.AB){
-            notifyItemRemoved(0)
-            notifyItemRangeInserted(0,2)
+        if (pattern == ReplacePattern.TwoToAB){
+            notifyItemRemoved(1)
+            notifyItemRangeInserted(1,2)
         }
     }
 }
 
 enum class ReplacePattern {
-    A,
-    AB
+    OneToA,
+    TwoToAB
 }

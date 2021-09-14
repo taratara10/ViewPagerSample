@@ -22,7 +22,7 @@ class FragmentTwo: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnReplaceAb.setOnClickListener {
-            viewModel.flag.postValue(ReplacePattern.AB)
+            viewModel.flag.postValue(ReplacePattern.TwoToAB)
         }
 
     }
